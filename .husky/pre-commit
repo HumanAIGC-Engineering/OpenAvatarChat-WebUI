@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+PATH=$(pwd)/.node/bin:$(pwd)/node_modules/.bin:$PATH lint-staged
