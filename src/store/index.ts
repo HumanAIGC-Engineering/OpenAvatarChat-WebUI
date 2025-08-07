@@ -109,7 +109,12 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         this.micMuted = false
         this.cameraOff = false
         this.volumeMuted = false
-
+        if (!navigator.mediaDevices) {
+          message.error(
+            '无法获取媒体设备，请确保用localhost访问或https协议访问',
+          )
+          return
+        }
         await navigator.mediaDevices
           .getUserMedia({
             audio: true,
@@ -146,16 +151,9 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         console.log(videoDeviceId, audioDeviceId, ' access web device')
         this.fillStream(audioDeviceId, videoDeviceId)
         this.webcamAccessed = true
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          // dispatch('error', i18n('image.no_webcam_support'))
-          // alert(i18n('image.no_webcam_support'))
-        }
-      } catch (err) {
-        // if (err instanceof DOMException && err.name == 'NotAllowedError') {
-        //   dispatch('error', i18n('image.allow_webcam_access'))
-        // } else {
-        //   throw err
-        // }
+      } catch (err: any) {
+        console.log(err)
+        message.error(err.message)
       }
     },
     async init() {
@@ -176,7 +174,9 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           }
         })
         .catch(() => {
-          message.error('服务端链接失败，请检查网络')
+          message.error(
+            '服务端链接失败，请检查是否能正确访问到 OpenAvatarChat 服务端',
+          )
         })
     },
     handleCameraOff() {
@@ -354,7 +354,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           .catch((e) => {
             console.info('catching', e)
             this.streamState = StreamState.closed
-            alert('Too many concurrent users. Come back later!')
+            message.error(e)
           })
       } else if (this.streamState === 'waiting') {
         // waiting 中不允许操作
