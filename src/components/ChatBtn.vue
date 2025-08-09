@@ -4,7 +4,7 @@
       :class="[
         'chat-btn',
         streamState === StreamState.closed && 'start-chat',
-        streamState === StreamState.open && 'stop-chat'
+        streamState === StreamState.open && 'stop-chat',
       ]"
       @click="onStartChat"
     >
@@ -14,8 +14,7 @@
       <template v-else-if="streamState === StreamState.waiting">
         <div class="waiting-icon-text">
           <div class="icon" title="spinner">
-            <!-- <Spin wrapperClassName="spin-icon"></Spin> -->
-            <!-- TODO: spinner 替换 -->
+            <Spin wrapperClassName="spin-icon"></Spin>
           </div>
           <span>等待中</span>
         </div>
@@ -37,23 +36,23 @@
 </template>
 
 <script setup lang="ts">
-import {Spin} from 'ant-design-vue'
-import { StreamState } from '@/interface/voiceChat'
-import AudioWave from '@/components/AudioWave.vue'
+import { Spin } from 'ant-design-vue';
+import { StreamState } from '@/interface/voiceChat';
+import AudioWave from '@/components/AudioWave.vue';
 
 const props = withDefaults(
   defineProps<{
-    streamState: StreamState
-    onStartChat: any
-    audioSourceCallback: () => MediaStream | null
-    waveColor: string
+    streamState: StreamState;
+    onStartChat: any;
+    audioSourceCallback: () => MediaStream | null;
+    waveColor: string;
   }>(),
   {
-    streamState: StreamState.closed
-  }
-)
+    streamState: StreamState.closed,
+  },
+);
 
-const emit = defineEmits([])
+const emit = defineEmits([]);
 </script>
 
 <style scoped lang="less"></style>
@@ -105,6 +104,12 @@ const emit = defineEmits([])
       fill: #ffffff;
       stroke: #ffffff;
       color: #ffffff;
+    }
+    .spin-icon {
+      color: #fff;
+    }
+    :global(.ant-spin-dot-item) {
+      background-color: #fff !important;
     }
   }
 
