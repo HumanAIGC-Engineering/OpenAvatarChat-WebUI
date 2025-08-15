@@ -1,19 +1,19 @@
 <template>
   <div class="action-group">
     <div v-if="hasCamera">
-      <div class="action" @click="handleCameraOff" v-click-outside="() => (cameraListShow = false)">
+      <div v-click-outside="() => (cameraListShow = false)" class="action" @click="handleCameraOff">
         <Iconfont :icon="cameraOff ? CameraOff : CameraOn" />
         <div
           v-if="streamState === 'closed'"
           class="corner"
           @click.stop.prevent="() => (cameraListShow = !cameraListShow)"
         >
-          <div class="corner-inner"></div>
+          <div class="corner-inner" />
         </div>
         <div
+          v-show="cameraListShow && streamState === 'closed'"
           class="selectors"
           :class="{ left: isLandscape }"
-          v-show="cameraListShow && streamState === 'closed'"
         >
           <div
             v-for="device in availableVideoDevices"
@@ -21,8 +21,8 @@
             class="selector"
             @click.stop="
               () => {
-                handleDeviceChange(device.deviceId);
-                cameraListShow = false;
+                handleDeviceChange(device.deviceId)
+                cameraListShow = false
               }
             "
           >
@@ -38,19 +38,19 @@
       </div>
     </div>
     <div v-if="hasMic">
-      <div class="action" @click="handleMicMuted" v-click-outside="() => (micListShow = false)">
+      <div v-click-outside="() => (micListShow = false)" class="action" @click="handleMicMuted">
         <Iconfont :icon="micMuted ? MicOff : MicOn" />
         <div
           v-if="streamState === 'closed'"
           class="corner"
           @click.stop.prevent="() => (micListShow = !micListShow)"
         >
-          <div class="corner-inner"></div>
+          <div class="corner-inner" />
         </div>
         <div
+          v-show="micListShow && streamState === 'closed'"
           class="selectors"
           :class="{ left: isLandscape }"
-          v-show="micListShow && streamState === 'closed'"
         >
           <div
             v-for="device in availableAudioDevices"
@@ -58,8 +58,8 @@
             class="selector"
             @click.stop="
               (e) => {
-                handleDeviceChange(device.deviceId);
-                micListShow = false;
+                handleDeviceChange(device.deviceId)
+                micListShow = false
               }
             "
           >
@@ -86,10 +86,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useVideoChatStore } from '@/store';
-import { useVisionStore } from '@/store/vision';
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import { useVideoChatStore } from '@/store'
+import { useVisionStore } from '@/store/vision'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import Iconfont, {
   CameraOff,
   CameraOn,
@@ -100,9 +100,9 @@ import Iconfont, {
   SubtitleOn,
   VolumeOff,
   VolumeOn,
-} from './Iconfont';
-const videoChatStore = useVideoChatStore();
-const visionStore = useVisionStore();
+} from './Iconfont'
+const videoChatStore = useVideoChatStore()
+const visionStore = useVisionStore()
 const {
   hasCamera,
   hasMic,
@@ -116,18 +116,18 @@ const {
   selectedVideoDevice,
   availableAudioDevices,
   availableVideoDevices,
-} = storeToRefs(videoChatStore);
+} = storeToRefs(videoChatStore)
 const {
   handleCameraOff,
   handleMicMuted,
   handleVolumeMute,
   handleDeviceChange,
   handleSubtitleToggle,
-} = videoChatStore;
+} = videoChatStore
 
-const { wrapperRect, isLandscape } = storeToRefs(visionStore);
-const micListShow = ref(false);
-const cameraListShow = ref(false);
+const { wrapperRect, isLandscape } = storeToRefs(visionStore)
+const micListShow = ref(false)
+const cameraListShow = ref(false)
 </script>
 
 <style lang="less" scoped>

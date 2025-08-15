@@ -1,10 +1,11 @@
 import legacyPlugin from '@vitejs/plugin-legacy'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
-// import mkcert from 'vite-plugin-mkcert'
+import mkcert from 'vite-plugin-mkcert'
 import { join } from 'path'
 
 // server of your OpenAvatarChat
+// if you are not use localhost, you need to start https
 const serverIP = '127.0.0.1'
 const serverPort = '8282'
 
@@ -13,10 +14,6 @@ export default defineConfig({
   base: './',
   build: {
     rollupOptions: {
-      // input: {
-      //   index: resolve(__dirname, 'index.html'),
-      //   cropImage: resolve(__dirname, 'cropImage.html')
-      // },
       output: {
         entryFileNames: `assets/[name].js`,
         chunkFileNames: `assets/[name].js`,

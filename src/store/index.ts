@@ -110,9 +110,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         this.cameraOff = false
         this.volumeMuted = false
         if (!navigator.mediaDevices) {
-          message.error(
-            '无法获取媒体设备，请确保用localhost访问或https协议访问',
-          )
+          message.error('无法获取媒体设备，请确保用localhost访问或https协议访问')
           return
         }
         await navigator.mediaDevices
@@ -136,16 +134,12 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         console.log('🚀 ~ access_webcam ~ devices:', devices)
         const videoDeviceId =
           this.selectedVideoDevice &&
-          devices.some(
-            (device) => device.deviceId === this.selectedVideoDevice?.deviceId,
-          )
+          devices.some((device) => device.deviceId === this.selectedVideoDevice?.deviceId)
             ? this.selectedVideoDevice.deviceId
             : ''
         const audioDeviceId =
           this.selectedAudioDevice &&
-          devices.some(
-            (device) => device.deviceId === this.selectedAudioDevice?.deviceId,
-          )
+          devices.some((device) => device.deviceId === this.selectedAudioDevice?.deviceId)
             ? this.selectedAudioDevice.deviceId
             : ''
         console.log(videoDeviceId, audioDeviceId, ' access web device')
@@ -153,7 +147,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         this.webcamAccessed = true
       } catch (err: any) {
         console.log(err)
-        message.error(err.message)
+        message.error(err)
       }
     },
     async init() {
@@ -163,6 +157,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           if (config.rtc_configuration) {
             this.rtcConfig = config.rtc_configuration
           }
+
           console.log(config)
           if (config.avatar_config) {
             this.avatarType = config.avatar_config.avatar_type
@@ -174,9 +169,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           }
         })
         .catch(() => {
-          message.error(
-            '服务端链接失败，请检查是否能正确访问到 OpenAvatarChat 服务端',
-          )
+          message.error('服务端链接失败，请检查是否能正确访问到 OpenAvatarChat 服务端')
         })
     },
     handleCameraOff() {
@@ -204,29 +197,19 @@ export const useVideoChatStore = defineStore('videoChatStore', {
       console.log('🚀 ~ handle_device_change ~ devices:', devices)
       let videoDeviceId =
         this.selectedVideoDevice &&
-        devices.some(
-          (device) => device.deviceId === this.selectedVideoDevice?.deviceId,
-        )
+        devices.some((device) => device.deviceId === this.selectedVideoDevice?.deviceId)
           ? this.selectedVideoDevice.deviceId
           : ''
       let audioDeviceId =
         this.selectedAudioDevice &&
-        devices.some(
-          (device) => device.deviceId === this.selectedAudioDevice?.deviceId,
-        )
+        devices.some((device) => device.deviceId === this.selectedAudioDevice?.deviceId)
           ? this.selectedAudioDevice.deviceId
           : ''
-      if (
-        this.availableVideoDevices.find(
-          (video_device) => video_device.deviceId === device_id,
-        )
-      ) {
+      if (this.availableVideoDevices.find((video_device) => video_device.deviceId === device_id)) {
         videoDeviceId = device_id
         this.cameraOff = false
       } else if (
-        this.availableAudioDevices.find(
-          (audio_device) => audio_device.deviceId === device_id,
-        )
+        this.availableAudioDevices.find((audio_device) => audio_device.deviceId === device_id)
       ) {
         audioDeviceId = device_id
         this.micMuted = false
@@ -235,6 +218,14 @@ export const useVideoChatStore = defineStore('videoChatStore', {
     },
     handleSubtitleToggle() {
       this.showChatRecords = !this.showChatRecords
+      const visionState = useVisionStore()
+      const { wrapperRef, wrapperRect } = visionState
+      console.log(wrapperRect, wrapperRef)
+      if (!wrapperRef || !wrapperRect) return
+      wrapperRef.getBoundingClientRect()
+      wrapperRect.width = wrapperRef!.clientWidth
+      wrapperRect.height = wrapperRef!.clientHeight
+      visionState.isLandscape = wrapperRect.width > wrapperRect.height
     },
     async updateAvailableDevices() {
       const devices = await getDevices()
@@ -250,9 +241,8 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           return device.kind === 'audioinput' && device.deviceId
         }) && this.hasMicPermission
       this.hasCamera =
-        devices.some(
-          (device) => device.kind === 'videoinput' && device.deviceId,
-        ) && this.hasCameraPermission
+        devices.some((device) => device.kind === 'videoinput' && device.deviceId) &&
+        this.hasCameraPermission
       await getStream(
         audioDeviceId && audioDeviceId !== 'default'
           ? { deviceId: { exact: audioDeviceId } }
@@ -260,7 +250,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         videoDeviceId && videoDeviceId !== 'default'
           ? { deviceId: { exact: videoDeviceId } }
           : this.hasCamera,
-        this.trackConstraints,
+        this.trackConstraints
       )
         .then(async (local_stream) => {
           console.log('local_stream', local_stream)
@@ -269,20 +259,17 @@ export const useVideoChatStore = defineStore('videoChatStore', {
         })
         .then(() => {
           const used_devices = this.stream!.getTracks().map(
-            (track) => track.getSettings()?.deviceId,
+            (track) => track.getSettings()?.deviceId
           )
           used_devices.forEach((device_id) => {
-            const used_device = devices.find(
-              (device) => device.deviceId === device_id,
-            )
+            const used_device = devices.find((device) => device.deviceId === device_id)
             if (used_device && used_device?.kind.includes('video')) {
               this.selectedVideoDevice = used_device
             } else if (used_device && used_device?.kind.includes('audio')) {
               this.selectedAudioDevice = used_device
             }
           })
-          !this.selectedVideoDevice &&
-            (this.selectedVideoDevice = this.availableVideoDevices[0])
+          !this.selectedVideoDevice && (this.selectedVideoDevice = this.availableVideoDevices[0])
         })
         .catch((e) => {
           console.error('image.no_webcam_support', e)
@@ -315,29 +302,22 @@ export const useVideoChatStore = defineStore('videoChatStore', {
       if (this.streamState === 'closed') {
         this.chatRecords = []
         this.peerConnection = new RTCPeerConnection() // TODO RTC_configuration
-        this.peerConnection.addEventListener(
-          'connectionstatechange',
-          async (event) => {
-            switch (this.peerConnection!.connectionState) {
-              case 'connected':
-                this.streamState = StreamState.open
-                break
-              case 'disconnected':
-                this.streamState = StreamState.closed
-                stop(this.peerConnection!)
-                // await access_webcam() //TODO 重置状态
-                break
-              default:
-                break
-            }
-          },
-        )
+        this.peerConnection.addEventListener('connectionstatechange', async (event) => {
+          switch (this.peerConnection!.connectionState) {
+            case 'connected':
+              this.streamState = StreamState.open
+              break
+            case 'disconnected':
+              this.streamState = StreamState.closed
+              stop(this.peerConnection!)
+              // await access_webcam() //TODO 重置状态
+              break
+            default:
+              break
+          }
+        })
         this.streamState = StreamState.waiting
-        await setupWebRTC(
-          this.stream!,
-          this.peerConnection!,
-          visionState.remoteVideoRef!,
-        )
+        await setupWebRTC(this.stream!, this.peerConnection!, visionState.remoteVideoRef!)
           .then(([dataChannel, webRTCId]) => {
             this.streamState = StreamState.open
             this.webRTCId = webRTCId as string
@@ -355,6 +335,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
             console.info('catching', e)
             this.streamState = StreamState.closed
             message.error(e)
+            message.error('请检查是否超过数字人并发上限')
           })
       } else if (this.streamState === 'waiting') {
         // waiting 中不允许操作
@@ -373,7 +354,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
     },
     initWebsocket(ws_route: string, webRTCId: string) {
       const ws = new WS(
-        `${window.location.protocol.includes('https') ? 'wss' : 'ws'}://${window.location.host}${ws_route}/${webRTCId}`,
+        `${window.location.protocol.includes('https') ? 'wss' : 'ws'}://${window.location.host}${ws_route}/${webRTCId}`
       )
       ws.on(WsEventTypes.WS_OPEN, () => {
         console.log('socket opened')
