@@ -66082,7 +66082,7 @@ const ba = i5('visionStore', {
         }
       },
       async init() {
-        fetch('/openavatarchat/init')
+        fetch('/openavatarchat/initconfig')
           .then((n) => n.json())
           .then((n) => {
             ;(n.rtc_configuration && (this.rtcConfig = n.rtc_configuration),
@@ -69992,7 +69992,7 @@ const _ie = si(gie, [['render', vie]]),
       }
     },
   }),
-  Rie = si(Mie, [['__scopeId', 'data-v-8a792db3']]),
+  Rie = si(Mie, [['__scopeId', 'data-v-628a9c05']]),
   Iie = { class: 'gradio-webrtc-waveContainer' },
   Nie = qt({
     __name: 'AudioWave',

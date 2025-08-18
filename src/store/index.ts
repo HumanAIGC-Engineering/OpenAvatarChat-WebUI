@@ -151,7 +151,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
       }
     },
     async init() {
-      fetch('/openavatarchat/init')
+      fetch('/openavatarchat/initconfig')
         .then((res) => res.json())
         .then((config) => {
           if (config.rtc_configuration) {
