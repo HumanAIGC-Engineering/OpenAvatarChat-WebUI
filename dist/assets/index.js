@@ -66214,7 +66214,7 @@ const ba = i5('visionStore', {
         const n = ba()
         this.streamState === 'closed'
           ? ((this.chatRecords = []),
-            (this.peerConnection = new RTCPeerConnection()),
+            (this.peerConnection = new RTCPeerConnection(this.rtcConfig)),
             this.peerConnection.addEventListener('connectionstatechange', async (t) => {
               switch (this.peerConnection.connectionState) {
                 case 'connected':

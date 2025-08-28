@@ -301,7 +301,7 @@ export const useVideoChatStore = defineStore('videoChatStore', {
       const visionState = useVisionStore()
       if (this.streamState === 'closed') {
         this.chatRecords = []
-        this.peerConnection = new RTCPeerConnection() // TODO RTC_configuration
+        this.peerConnection = new RTCPeerConnection(this.rtcConfig)
         this.peerConnection.addEventListener('connectionstatechange', async (event) => {
           switch (this.peerConnection!.connectionState) {
             case 'connected':
@@ -321,7 +321,6 @@ export const useVideoChatStore = defineStore('videoChatStore', {
           .then(([dataChannel, webRTCId]) => {
             this.streamState = StreamState.open
             this.webRTCId = webRTCId as string
-            // TODO GS
             this.chatDataChannel = dataChannel as any
 
             if (this.avatarType && this.avatarWSRoute) {

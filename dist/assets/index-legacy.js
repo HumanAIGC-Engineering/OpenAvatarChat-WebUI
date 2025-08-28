@@ -86026,7 +86026,7 @@
                               }
                               return (
                                 (e.chatRecords = []),
-                                (e.peerConnection = new RTCPeerConnection()),
+                                (e.peerConnection = new RTCPeerConnection(e.rtcConfig)),
                                 e.peerConnection.addEventListener(
                                   'connectionstatechange',
                                   (function () {
