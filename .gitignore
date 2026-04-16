@@ -24,5 +24,8 @@ dist-ssr
 *.sln
 *.sw?
 .ci
-
+out
 #package-lock.json
+
+dist-electron
+.env

@@ -1,0 +1,29 @@
+html,
+body {
+  margin: 0;
+  overflow-y: auto;
+  // 禁用原生缩放和滚动回弹
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+img {
+  pointer-events: none;
+  // 禁止图片长按保存
+  -webkit-touch-callout: none;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  // 确保不触发原生缩放
+  touch-action: manipulation;
+}
