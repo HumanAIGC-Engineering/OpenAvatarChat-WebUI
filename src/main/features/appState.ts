@@ -22,6 +22,10 @@ class AppState {
       showChatRecords: true,
     }) as IAppState
 
+    // 每次启动强制重置 inputVisible，避免记忆为 hidden 时导致无法进行连接
+    this.state.inputVisible = true
+    store.set('appState', this.state)
+
     store.onDidChange('appState.showChatRecords', (newValue, oldValue) => {
       this.updateWindowWidth()
     })

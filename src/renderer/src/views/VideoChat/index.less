@@ -2,12 +2,15 @@
   // position: absolute;
   margin: 0 70px;
   transition: width 0.1s ease;
+  -webkit-app-region: no-drag;
 }
 .page-container {
   height: 100%;
   width: 100%;
   padding: 32px;
   overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -15,6 +18,8 @@
 .content-container {
   height: 100%;
   max-width: calc(100%);
+  position: relative;
+  z-index: 20; // 整体高于右侧对话记录
 }
 .video-container {
   -webkit-app-region: drag;
@@ -37,6 +42,7 @@
     z-index: 1;
     background: #fff;
     transition: all 0.3s ease;
+    -webkit-app-region: no-drag;
   }
   .local-video-container.scaled {
     top: auto;
@@ -52,6 +58,7 @@
     border-radius: 32px;
     transition: all 0.3s linear;
     background: #fff;
+    -webkit-app-region: no-drag;
 
     &.connected {
       background: transparent;
@@ -76,7 +83,8 @@
 }
 .actions {
   position: absolute;
-  z-index: 2;
+  z-index: 200;
+  -webkit-app-region: no-drag;
   left: calc(100% + 12px);
   bottom: 0;
 }
@@ -85,6 +93,8 @@
   overflow: auto;
   aspect-ratio: 9 / 16;
   z-index: 1;
+  position: relative;
+  -webkit-app-region: no-drag;
 
   &.inline {
     position: absolute;

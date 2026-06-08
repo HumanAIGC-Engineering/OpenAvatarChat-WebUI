@@ -9,6 +9,7 @@ asarUnpack:
   - resources/**
 win:
   executableName: electron-app
+  signAndEditExecutable: false
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

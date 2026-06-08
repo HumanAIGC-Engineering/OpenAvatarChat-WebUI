@@ -1,7 +1,11 @@
 <template>
   <div class="action-group">
     <div v-if="hasCamera">
-      <div v-click-outside="() => (cameraListShow = false)" class="action" @click="handleCameraOff">
+      <div
+        v-click-outside="() => (cameraListShow = false)"
+        :class="['action', { 'menu-open': cameraListShow }]"
+        @click="handleCameraOff"
+      >
         <Iconfont :icon="cameraOff ? CameraOff : CameraOn" />
         <div
           v-if="streamState === 'closed'"
@@ -38,7 +42,11 @@
       </div>
     </div>
     <div v-if="hasMic">
-      <div v-click-outside="() => (micListShow = false)" class="action" @click="handleMicMuted">
+      <div
+        v-click-outside="() => (micListShow = false)"
+        :class="['action', { 'menu-open': micListShow }]"
+        @click="handleMicMuted"
+      >
         <Iconfont :icon="micMuted ? MicOff : MicOn" />
         <div
           v-if="streamState === 'closed'"
@@ -144,6 +152,8 @@ const cameraListShow = ref(false)
   background: rgba(88, 87, 87, 0.5);
   padding: 2px;
   backdrop-filter: blur(8px);
+  z-index: 200;
+  position: relative;
 
   .action {
     cursor: pointer;
@@ -156,6 +166,11 @@ const cameraListShow = ref(false)
     justify-content: center;
     position: relative;
     color: #fff;
+
+    // 下拉展开时提升按钮层级，避免被其他元素遮挡
+    &.menu-open {
+      z-index: 300;
+    }
 
     .corner {
       position: absolute;
@@ -184,6 +199,7 @@ const cameraListShow = ref(false)
       left: calc(100%);
       margin-left: 3px;
       max-height: 150px;
+      z-index: 400;
 
       &.left {
         left: 0;

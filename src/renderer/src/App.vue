@@ -22,7 +22,7 @@ appState.init()
   <ConfigProvider :locale="antdLocale[locale]">
     <div
       v-if="isElectron"
-      class="wrap"
+      class="wrap wrap-electron"
       :style="{
         backgroundImage: 'none',
       }"
@@ -56,5 +56,10 @@ appState.init()
   *::-webkit-scrollbar {
     display: none;
   }
+}
+
+.wrap-electron {
+  height: 100vh;
+  overflow: hidden;
 }
 </style>

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, session, globalShortcut, PopupOptions } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, PopupOptions } from 'electron'
 
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -36,9 +36,15 @@ function createWindow(): void {
     appState.setState(data.key, data.value)
   })
   // 监听显示右键菜单请求
-  ipcMain.on('show-context-menu', (event) => {
+  ipcMain.on('show-context-menu', (event, position?: { x: number; y: number }) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+    if (!win) return
     const menu = createContextMenu()
-    menu.popup(BrowserWindow.fromWebContents(event.sender) as PopupOptions)
+    const popupOptions: PopupOptions = {
+      window: win,
+      ...(position ? { x: Math.round(position.x), y: Math.round(position.y) } : {}),
+    }
+    menu.popup(popupOptions)
   })
 
   mainWindow.webContents.openDevTools()

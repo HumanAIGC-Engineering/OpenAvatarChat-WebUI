@@ -4,6 +4,20 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {}
 
+function setupContextMenu(): void {
+  document.addEventListener(
+    'contextmenu',
+    (event) => {
+      event.preventDefault()
+      ipcRenderer.send('show-context-menu', {
+        x: event.clientX,
+        y: event.clientY,
+      })
+    },
+    true
+  )
+}
+
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
@@ -41,11 +55,5 @@ console.log(window.electron)
 console.log(process.contextIsolated)
 
 document.addEventListener('DOMContentLoaded', () => {
-  const app = document.getElementById('app')
-  if (app) {
-    app.addEventListener('contextmenu', (event) => {
-      event.preventDefault()
-      ipcRenderer.send('show-context-menu')
-    })
-  }
+  setupContextMenu()
 })
